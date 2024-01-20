@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="GameReview.css">
+    <title>Document</title>
+    <style>
+       *{
+    margin: 0;
+    padding: 0;
+    font-family: "poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.header{
+    height: 100vh;
+    width: 100%;
+    padding: 0 8%;
+    position: relative;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    width: 140px;
+}
+
+.nav-links{
+    padding: 20px 0;
+}
+
+.nav-links li{
+    display: inline-block;
+    margin: 0 15px;
+}
+
+.nav-links li a{
+    text-decoration: none;
+    color: #fff;
+    padding: 5px 0;position: relative;
+}
+
+.nav-links li a::after{
+    content: "";
+    background: #ff3d00;
+    width: 0%;
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: width 0.5s;
+}
+
+.nav-links li a:hover::after{
+    width: 100%;
+}
+
+.btn{
+    background: #ff3d00;
+    color :#fff;
+    padding: 10px 30px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.content{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-width: 900px;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    color: #fff;
+    padding-top: 50px;
+
+}
+
+.content h1{
+    font-size: 65px;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+.content form{
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+}
+
+.content form input{
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0 20px;
+    font-size: 18px;
+}
+
+.content form button{
+    background: #ff3d00;
+    color: #fff;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.category-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.category{
+    width: 80px;
+    height: 80px;
+    background: rgba(255,61,0,0.15);
+    margin: 0 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.category img{
+    width: 50px;
+    margin-bottom: 5px;
+}
+
+.back-video{
+    position: absolute;
+    right: 0;
+    bottom:0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+}
+
+.slider{
+    height: 90vh;
+    margin-top: -1px;
+    position: relative;
+}
+.slider .list .item{
+    position: absolute;
+    inset: 0 0 0 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: .5s;
+}
+.slider .list .item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.slider .list .item::after{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.slider .list .item .content{
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    width: 500px;
+    max-width: 80%;
+    z-index: 1;
+}
+.slider .list .item .content p:nth-child(1){
+    text-transform: uppercase;
+    letter-spacing: 10px;
+}
+.slider .list .item .content h2{
+    font-size: 45px;
+    color: black;
+    margin: 0;
+}
+.slider .list .item.active{
+    opacity: 1;
+    z-index: 10;
+}
+@keyframes showContent {
+    to{
+        transform: translateY(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+.slider .list .item.active p:nth-child(1),
+.slider .list .item.active h2,
+.slider .list .item.active p:nth-child(3){
+    transform: translateY(30px);
+    filter: blur(20px);
+    opacity: 0;
+    animation: showContent .5s .7s ease-in-out 1 forwards;
+}
+.slider .list .item.active h2{
+    animation-delay: 1s;
+}
+.slider .list .item.active p:nth-child(3){
+    animation-duration: 1.3s;
+}
+.arrows{
+    position: absolute;
+    top: 30%;
+    right: 50px;
+    z-index: 100;
+}
+.arrows button{
+    background-color: #eee5;
+    border: none;
+    font-family: monospace;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    font-size: x-large;
+    color: #eee;
+    transition: .5s;
+}
+.arrows button:hover{
+    background-color: #eee;
+    color: black;
+}
+.thumbnail{
+    position: absolute;
+    bottom: 20px;
+    z-index: 11;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    height: 250px;
+    padding: 0 50px;
+    box-sizing: border-box;
+    overflow: auto;
+    justify-content: center;
+}
+.thumbnail::-webkit-scrollbar{
+    width: 0;
+}
+.thumbnail .item{
+    width: 190px;
+    height: 220px;
+    filter: brightness(.5);
+    transition: .5s;
+    flex-shrink: 0;
+}
+.thumbnail .item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.thumbnail .item.active{
+    filter: brightness(1.5);
+}
+.thumbnail .item .content{
+    position: absolute;
+    inset: auto 10px 0px 90px;
+}
+@media screen and (max-width: 678px) {
+    .thumbnail{
+        justify-content: start;
+    }
+    .slider .list .item .content h2{
+        font-size: 60px;
+    }
+    .arrows{
+        top: 10%;
+    }
+}
+
+@media(min-aspect-ratio: 16/9){
+    .back-video{
+        width: 100%;
+        height: auto;
+    }
+} 
+    </style>
+</head>
+    <body>
+        <div class="header">
+
+            <video autoplay loop class="back-video" muted plays-inline>
+                <source src="video (2160p) (1).mp4" type="video/mp4">
+            </video>
+
+            <nav>
+                <img src="media/logo.png" class="logo">
+                <ul class="nav-links">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Ranking</a></li>
+                    <li><a href="">Reviews</a></li>
+                    <li><a href="">Request</a></li>
+                    <li class="btn">sign-up</li>
+                </ul>
+            </nav>
+
+            <div class="slider">
+                <!-- list Items -->
+                <div class="list">
+                    <div class="item active">
+                        <img src="GamePicture/yakuza like a dragon hero.jpg">
+                        <div class="content">
+                            <p>26th January</p>
+                            <h2>Yakuza Like A Dragon</h2>
+                            <p>
+                                Yakuza: Like a Dragon adalah video game role-playing yang dikembangkan oleh Ryu Ga Gotoku Studio dan diterbitkan oleh Sega.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/Jujutsu-Kaisen-Cursed-Clash.jpg">
+                        <div class="content">
+                            <p>1st February</p>
+                            <h2>Jujutsu Kaisen: Cursed Clash</h2>
+                            <p>
+                                Jujutsu Kaisen: Cursed Clash adalah game pertarungan mendatang yang dikembangkan oleh Byking dan Gemdrops, dan diterbitkan oleh Bandai Namco Entertainment.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/the-outlast-trials.jpg">
+                        <div class="content">
+                            <p>5th March</p>
+                            <h2>The Outlast Trials</h2>
+                            <p>
+                                The Outlast Trials adalah video game bertahan hidup horor psikologis orang pertama yang dikembangkan dan diterbitkan oleh Red Barrels.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/Eiyuden Chronicle Hundred Heroes.jpg">
+                        <div class="content">
+                            <p>23rd April</p>
+                            <h2>Eiyuden Chronicle: Hundred Heroes</h2>
+                            <p>
+                                Eiyuden Chronicle: Hundred Heroes adalah video game role-playing 2024 mendatang yang dikembangkan oleh Rabbit and Bear Studios dan diterbitkan oleh 505 Games.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/Destiny 2.jpg">
+                        <div class="content">
+                            <p>4th June</p>
+                            <h2>Destiny 2: The Final Shape</h2>
+                            <p>
+                                Destiny 2: The Final Shape adalah ekspansi besar yang akan datang untuk Destiny 2, video game penembak orang pertama yang dibuat oleh Bungie.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- button arrows -->
+                <div class="arrows">
+                    <button id="prev"><</button>
+                    <button id="next">></button>
+                </div>
+                <!-- thumbnail -->
+                <div class="thumbnail">
+                    <div class="item active">
+                        <img src="GamePicture/yakuza ldh.jpg">
+                        <div class="content">
+                            Yakuza Like A Dragon
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/JJK.jpg">
+                        <div class="content">
+                            Jujutsu Kaisen: Cursed Clash
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/The_Outlast_Trials_cover.jpg">
+                        <div class="content">
+                            The Outlast Trials
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/eiyuden_hero.jpg">
+                        <div class="content">
+                            Eiyuden Chronicle: Hundred Heroes
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="GamePicture/Bungie_TheFinalShape.jpg">
+                        <div class="content">
+                            Destiny 2: The Final Shape
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+            <script src="Buatanlagi.js"></script>
+
+
+        </div>
+    </body>
+</html>
